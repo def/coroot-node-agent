@@ -57,5 +57,16 @@ jobs:
             VERSION=${{ steps.meta.outputs.version }}
 
       - run: |
-          docker run --rm ${{ steps.meta.outputs.tags }}
+          docker create --platform ${{ matrix.platform }} --name coroot-node-agent ${{ steps.meta.outputs.tags }} && 
+          docker cp coroot-node-agent:/usr/bin/coroot-node-agent /tmp/coroot-node-agent-${{ env.PLATFORM_PAIR }}
+
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: /tmp/coroot-node-agent-${{ env.PLATFORM_PAIR }}
+          asset_name: coroot-node-agent-${{ env.PLATFORM_PAIR }}
+          asset_content_type: application/octet-stream
+          
 
