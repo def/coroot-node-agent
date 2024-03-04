@@ -52,7 +52,7 @@ jobs:
 
       - name: extract arm64 binary from the image
         run: |
-          docker create --platform linux/arm64 --name amd64 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} && 
+          docker create --platform linux/arm64 --name arm64 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} && 
           docker cp arm64:/usr/bin/coroot-node-agent /tmp/coroot-node-agent-arm64
 
       - name: upload amd64 binary
