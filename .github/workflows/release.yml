@@ -48,12 +48,12 @@ jobs:
       - name: extract amd64 binary from the image
         run: | 
           docker create --platform linux/amd64 --name amd64 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} && 
-          docker cp coroot-node-agent:/usr/bin/coroot-node-agent /tmp/coroot-node-agent-amd64
+          docker cp amd64:/usr/bin/coroot-node-agent /tmp/coroot-node-agent-amd64
 
       - name: extract arm64 binary from the image
         run: |
           docker create --platform linux/arm64 --name amd64 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} && 
-          docker cp coroot-node-agent:/usr/bin/coroot-node-agent /tmp/coroot-node-agent-arm64
+          docker cp arm64:/usr/bin/coroot-node-agent /tmp/coroot-node-agent-arm64
 
       - name: upload amd64 binary
         uses: actions/upload-release-asset@v1
@@ -83,7 +83,8 @@ jobs:
             const { RELEASE_ID } = process.env
             octokit.rest.repos.updateRelease({
               release_id: `${RELEASE_ID}`,
-              prerelease: false
+              prerelease: false,
+              make_latest: true
             })  
           
 
